@@ -1,0 +1,35 @@
+{
+    "ok": true,
+    "result": [
+        {
+            "update_id": 370928305,
+            "message": {
+                "message_id": 15,
+                "from": {
+                    "id": 468311277,
+                    "is_bot": false,
+                    "first_name": "Мистер",
+                    "last_name": "Кто",
+                    "username": "MisterKTO1",
+                    "language_code": "ru"
+                },
+                "chat": {
+                    "id": 468311277,
+                    "first_name": "Мистер",
+                    "last_name": "Кто",
+                    "username": "MisterKTO1",
+                    "type": "private"
+                },
+                "date": 1741778919,
+                "text": "/start",
+                "entities": [
+                    {
+                        "offset": 0,
+                        "length": 6,
+                        "type": "bot_command"
+                    }
+                ]
+            }
+        }
+    ]
+}
