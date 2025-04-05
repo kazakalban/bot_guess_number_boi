@@ -1,2 +1,3 @@
 /__pycache__/
 private_for_API.py
+*.db
