@@ -6,7 +6,16 @@ import test_bot_text as texts
 from test_bot_tech import ATTEMPTS,get_random_number,STICKER_ID, check_and_add_user_db, logger
 from test_bot_dp import get_user_stat, update_user_stat
 
-bot = Bot(token=TEST_BOT_TOKEN)
+import os
+from environs import Env
+
+env = Env()  # Создаем экземпляр класса Env
+env.read_env()  # Методом read_env() читаем файл .env и загружаем из него переменные в окружение 
+
+bot_token = env('TEST_BOT_TOKEN')  # Получаем и сохраняем значение переменной окружения в переменную bot_token
+
+
+bot = Bot(token=bot_token) 
 dp = Dispatcher()
 
 
