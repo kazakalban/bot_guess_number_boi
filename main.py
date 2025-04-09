@@ -111,24 +111,14 @@ async def proccess_number_answer(message: Message):
         if int(message.text) == user_stat['secret_number']:
             update_user_stat(user_id = message.from_user.id,
                              in_game = False,
-                             total_games = get_user_stat(message.from_user.id)['wins'] + 1,
+                             total_games = get_user_stat(message.from_user.id)['total_games'] + 1,
                              wins = get_user_stat(message.from_user.id)['wins'] + 1)
             await message.answer(
                 texts.NUMBER_ANSWER_TEXT,
                 parse_mode='Markdown'
             )
             logger.debug(f'{message.from_user.id} выйграл')
-        elif int(message.text) > user_stat['secret_number']:
-            logger.debug('Заданный число меньше')
-            update_user_stat(user_id=message.from_user.id,
-                             attempts = user_stat['attempts'] - 1)
-            await message.answer(texts.MY_NUMBER_LESS)
-        elif int(message.text) < user_stat['secret_number']:
-            logger.debug('Заданный число меньше')
-            update_user_stat(user_id=message.from_user.id,
-                             attempts = user_stat['attempts'] - 1)
-            await message.answer(texts.MY_NUMBER_MORE)
-        if user_stat['attempts'] == 0:
+        elif user_stat['attempts'] == 0:
             update_user_stat(user_id=message.from_user.id,
                              in_game=False,
                              total_games=user_stat['total_games'] + 1)
@@ -137,6 +127,16 @@ async def proccess_number_answer(message: Message):
                     secret_number = user_stat['secret_number']),
                 parse_mode='Markdown'
             )
+        elif int(message.text) > user_stat['secret_number']:
+            logger.debug('Заданный число меньше')
+            update_user_stat(user_id=message.from_user.id,
+                             attempts = user_stat['attempts'] - 1)
+            await message.answer(texts.MY_NUMBER_LESS.format(ATTEMPTS = user_stat['attempts']))
+        elif int(message.text) < user_stat['secret_number']:
+            logger.debug('Заданный число меньше')
+            update_user_stat(user_id=message.from_user.id,
+                             attempts = user_stat['attempts'] - 1)
+            await message.answer(texts.MY_NUMBER_MORE.format(ATTEMPTS = user_stat['attempts']))
     else:
         await message.answer(texts.NUMBER_ANSWER_TEXT_IN_GAME_FALSE)
 
@@ -158,6 +158,24 @@ async def procces_negative_answer(message: Message):
             parse_mode='Markdown'
         )
 
+
+
+# Этот хэндлер будет срабатывать на остальные любые сообщения
+@dp.message()
+async def procces_other_answers(message: Message):
+    logger.debug(f"Игрок {message.from_user.id} отправил сообщение {message.text}")
+    check_and_add_user_db(message)
+    user_stat = get_user_stat(message.from_user.id)
+    if user_stat['in_game']:
+        await message.answer(
+            texts.POSITIVE_ANSWER_TEXT_ELSE,
+            parse_mode='Markdown'
+        )
+    else:
+        await message.answer(
+            texts.OTHER_ANSWER_TEXT_ELSE,
+            parse_mode='Markdown'
+        )
 
 if __name__ == '__main__':
     dp.run_polling(bot)
