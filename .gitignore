@@ -3,3 +3,4 @@ private_for_API.py
 *.db
 .venv/
 *.log
+.env
